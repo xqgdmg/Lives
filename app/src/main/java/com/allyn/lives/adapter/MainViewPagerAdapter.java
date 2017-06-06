@@ -28,6 +28,8 @@ public class MainViewPagerAdapter extends FragmentPagerAdapter {
             case 0:
                 fragment = BooksClassifyFragment.newInstance();
                 break;
+
+             // 后面的都是一样的
             case 1:
                 fragment = BooksListFragment.newInstance(9); // setArguments 传值 , getArguments() 在 presenter
                 break;

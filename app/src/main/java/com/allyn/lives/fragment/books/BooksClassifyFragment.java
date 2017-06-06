@@ -13,7 +13,7 @@ import com.jude.beam.bijection.RequiresPresenter;
 import com.jude.easyrecyclerview.EasyRecyclerView;
 
 /**
- * 2016-6-21
+ * 第一个分类 Fragment
  */
 @RequiresPresenter(BooksClassifyFragmentPresenter.class)
 public class BooksClassifyFragment extends BeamFragment<BooksClassifyFragmentPresenter> {
@@ -27,8 +27,7 @@ public class BooksClassifyFragment extends BeamFragment<BooksClassifyFragmentPre
     public EasyRecyclerView recyclerView;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_books, container, false);
         recyclerView = (EasyRecyclerView) v.findViewById(R.id.recycler);
         recyclerView.setErrorView(R.layout.error_layout);
