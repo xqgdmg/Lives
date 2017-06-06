@@ -27,11 +27,11 @@ proguard/
 *.ipr
 *.iws
 *.idea/
-*.idea/libraries
 .idea/libraries
 .idea/
 /.idea/workspace.xml
 /.idea/libraries
+.idea/dictionaries
 
 **/build/
 .gradle
