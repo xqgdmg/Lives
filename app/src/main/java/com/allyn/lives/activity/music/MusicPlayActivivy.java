@@ -16,11 +16,11 @@ import android.widget.Toast;
 
 import com.allyn.lives.R;
 import com.allyn.lives.activity.base.BaseActivity;
-import com.allyn.lives.app.MainApp;
+import com.allyn.lives.app.MainApplication;
 import com.allyn.lives.bean.MusicBean;
 import com.allyn.lives.events.MusicBeamEvent;
 import com.allyn.lives.events.MusicCodeEvent;
-import com.allyn.lives.manage.PlayMainage;
+import com.allyn.lives.manage.PlayManager;
 import com.allyn.lives.service.MusicService;
 import com.allyn.lives.utils.Config;
 import com.allyn.lives.utils.RxBus;
@@ -100,7 +100,7 @@ public class MusicPlayActivivy extends BaseActivity {
         RxBus.getDefault().toObserverable(MusicBeamEvent.class).subscribe(new Action1<MusicBeamEvent>() {
             @Override
             public void call(MusicBeamEvent musicBeamEvent) {
-                music = PlayMainage.getList().get(musicBeamEvent.getIndex());
+                music = PlayManager.getList().get(musicBeamEvent.getIndex());
                 tvMusicNmae.setText(music.getName());
                 tvAuthorName.setText(music.getArtist());
             }
@@ -114,7 +114,7 @@ public class MusicPlayActivivy extends BaseActivity {
     Runnable run = new Runnable() {
         @Override
         public void run() {
-            MediaPlayer mediaPlayer = PlayMainage.mediaPlayer;
+            MediaPlayer mediaPlayer = PlayManager.mediaPlayer;
             if (mediaPlayer != null) {
                 mSeekbar.setProgress(mediaPlayer.getCurrentPosition() * mSeekbar.getMax() / mediaPlayer.getDuration());
             }
@@ -126,11 +126,11 @@ public class MusicPlayActivivy extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        media = PlayMainage.mediaPlayer;
+        media = PlayManager.mediaPlayer;
         mPosition = MusicService.servicePosition;
         if (media != null) {
             new Thread(run).start();
-            tvEnd.setText(PlayMainage.formatTime(media.getDuration()));
+            tvEnd.setText(PlayManager.formatTime(media.getDuration()));
 
             //更新播放时间
             if (mUpdateTimeFlag == false) {
@@ -140,7 +140,7 @@ public class MusicPlayActivivy extends BaseActivity {
             UpdateButton(media.isPlaying());
         }
 
-        if (PlayMainage.getList() == null) {
+        if (PlayManager.getList() == null) {
             tvMusicNmae.setText("没有歌曲");
             tvAuthorName.setText("");
             return;
@@ -149,7 +149,7 @@ public class MusicPlayActivivy extends BaseActivity {
             mPosition = 0;
         }
 
-        music = PlayMainage.getList().get(mPosition);
+        music = PlayManager.getList().get(mPosition);
         tvMusicNmae.setText(music.getName());
         tvAuthorName.setText(music.getArtist());
 
@@ -160,14 +160,14 @@ public class MusicPlayActivivy extends BaseActivity {
             mLike.setBackgroundResource(R.mipmap.ic_unlike_white);
         }
 
-        switch (PlayMainage.getCode()) {
-            case PlayMainage.ORDER:
+        switch (PlayManager.getCode()) {
+            case PlayManager.ORDER:
                 btnCode.setBackgroundResource(R.mipmap.ic_order);
                 break;
-            case PlayMainage.RANDOM:
+            case PlayManager.RANDOM:
                 btnCode.setBackgroundResource(R.mipmap.ic_random);
                 break;
-            case PlayMainage.REPOT:
+            case PlayManager.REPOT:
                 btnCode.setBackgroundResource(R.mipmap.ic_circulation);
                 break;
         }
@@ -182,12 +182,12 @@ public class MusicPlayActivivy extends BaseActivity {
                     @Override
                     public void run() {
                         int timeLen = 0;
-                        if (PlayMainage.mediaPlayer != null) {
-                            timeLen = PlayMainage.mediaPlayer.getCurrentPosition();
+                        if (PlayManager.mediaPlayer != null) {
+                            timeLen = PlayManager.mediaPlayer.getCurrentPosition();
                         } else {
                             timeLen = 0;
                         }
-                        tvStart.setText(PlayMainage.formatTime(timeLen));
+                        tvStart.setText(PlayManager.formatTime(timeLen));
                     }
                 });
                 //过一秒更新
@@ -215,19 +215,19 @@ public class MusicPlayActivivy extends BaseActivity {
         btnCode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                switch (PlayMainage.getCode()) {
-                    case PlayMainage.ORDER:
-                        PlayMainage.setCode(PlayMainage.RANDOM);
+                switch (PlayManager.getCode()) {
+                    case PlayManager.ORDER:
+                        PlayManager.setCode(PlayManager.RANDOM);
                         Toast.makeText(MusicPlayActivivy.this, "随机", Toast.LENGTH_SHORT).show();
                         btnCode.setBackgroundResource(R.mipmap.ic_random);
                         break;
-                    case PlayMainage.RANDOM:
-                        PlayMainage.setCode(PlayMainage.REPOT);
+                    case PlayManager.RANDOM:
+                        PlayManager.setCode(PlayManager.REPOT);
                         Toast.makeText(MusicPlayActivivy.this, "单循环", Toast.LENGTH_SHORT).show();
                         btnCode.setBackgroundResource(R.mipmap.ic_circulation);
                         break;
-                    case PlayMainage.REPOT:
-                        PlayMainage.setCode(PlayMainage.ORDER);
+                    case PlayManager.REPOT:
+                        PlayManager.setCode(PlayManager.ORDER);
                         Toast.makeText(MusicPlayActivivy.this, "顺序", Toast.LENGTH_SHORT).show();
                         btnCode.setBackgroundResource(R.mipmap.ic_order);
                         break;
@@ -246,12 +246,12 @@ public class MusicPlayActivivy extends BaseActivity {
                     @Override
                     public void call(Boolean aBoolean) {
                         if (aBoolean) {
-                            MainApp.getLiteOrm().delete(new WhereBuilder(MusicBean.class,
+                            MainApplication.getLiteOrm().delete(new WhereBuilder(MusicBean.class,
                                     MusicBean.MusicBeamId + "=?",
                                     new String[]{String.valueOf(music.getMusicId())}));
                             mLike.setBackgroundResource(R.mipmap.ic_unlike_white);
                         } else {
-                            MainApp.getLiteOrm().save(music);
+                            MainApplication.getLiteOrm().save(music);
                             mLike.setBackgroundResource(R.mipmap.ic_like_white);
                         }
                     }
@@ -267,7 +267,7 @@ public class MusicPlayActivivy extends BaseActivity {
                         "歌名: " + music.getName(),
                         "歌手: " + music.getArtist(),
                         "专辑: " + music.getAlbum(),
-                        "时间: " + PlayMainage.formatTime(music.getDuration()),
+                        "时间: " + PlayManager.formatTime(music.getDuration()),
                         "大小: " + TextFormater.getCacheSize(music.getSize()),
                         "文件地址: " + music.getFileData()
                 }, null);
@@ -291,8 +291,8 @@ public class MusicPlayActivivy extends BaseActivity {
 //                builder.setPositiveButton("删除", new android.content.DialogInterface.OnClickListener() {
 //                    @Override
 //                    public void onClick(DialogInterface dialog, int which) {
-//                        boolean isDeleteOk = PlayMainage.delete(MusicPlayActivivy.this, music);
-////                        boolean isDeleteOk = PlayMainage.deleteMusic(music.getFileData());
+//                        boolean isDeleteOk = PlayManager.delete(MusicPlayActivivy.this, music);
+////                        boolean isDeleteOk = PlayManager.deleteMusic(music.getFileData());
 //                        if (isDeleteOk) {
 //                            Snackbar.make(btnDeleteMusic, "删除功能有些Bug，后期修复", Snackbar.LENGTH_SHORT).show();
 //                            RxBus.getDefault().post(new MusicBeamEvent(mPosition));
@@ -356,11 +356,11 @@ public class MusicPlayActivivy extends BaseActivity {
             public void onStopTrackingTouch(SeekBar seekBar) {
                 //结束拖动时播放拖动位置的音乐，
                 int pro = seekBar.getProgress();
-                if (PlayMainage.mediaPlayer != null) {
+                if (PlayManager.mediaPlayer != null) {
                     //公式：      拖动后的播放进度=当前进度条的进度 X 歌曲的总长度 / 进度条的总大小
-                    PlayMainage.mediaPlayer.seekTo(pro * PlayMainage.mediaPlayer.getDuration() / seekBar.getMax());
+                    PlayManager.mediaPlayer.seekTo(pro * PlayManager.mediaPlayer.getDuration() / seekBar.getMax());
                     if (state) {
-                        PlayMainage.mediaPlayer.start();
+                        PlayManager.mediaPlayer.start();
                     }
                     new Thread(run).start();
                 }
@@ -370,7 +370,7 @@ public class MusicPlayActivivy extends BaseActivity {
     }
 
     public boolean IsLike(MusicBean musicBean) {
-        List<MusicBean> bean = MainApp.getLiteOrm().query(MusicBean.class);
+        List<MusicBean> bean = MainApplication.getLiteOrm().query(MusicBean.class);
         for (MusicBean musicBean1 : bean) {
             if (musicBean.getName().equals(musicBean1.getName())) {
                 return true;
@@ -380,34 +380,34 @@ public class MusicPlayActivivy extends BaseActivity {
     }
 
     public void UpdatePlay(boolean isNext) {
-        if (PlayMainage.getCode() == PlayMainage.ORDER) {
+        if (PlayManager.getCode() == PlayManager.ORDER) {
             if (isNext) {
-                if (mPosition == PlayMainage.getMusicSize() - 1) {
+                if (mPosition == PlayManager.getMusicSize() - 1) {
                     mPosition = 0;
                 }
                 mPosition++;
             } else {
                 if (mPosition == 0) {
-                    mPosition = PlayMainage.getMusicSize() - 1;
+                    mPosition = PlayManager.getMusicSize() - 1;
                 }
                 mPosition--;
             }
 
-        } else if (PlayMainage.getCode() == PlayMainage.RANDOM) {
-            mPosition = new Random().nextInt(PlayMainage.getMusicSize() - 1);
+        } else if (PlayManager.getCode() == PlayManager.RANDOM) {
+            mPosition = new Random().nextInt(PlayManager.getMusicSize() - 1);
         } else {
 
         }
-        PlayMainage.stop();
-        PlayMainage.play(mPosition, false);
+        PlayManager.stop();
+        PlayManager.play(mPosition, false);
         //修改当前播放音乐的位置
         MusicService.servicePosition = mPosition;
         //根据歌曲位置获取歌曲
-        music = PlayMainage.getList().get(mPosition);
+        music = PlayManager.getList().get(mPosition);
         //显示音乐的信息
         tvMusicNmae.setText(music.getName());
         tvAuthorName.setText(music.getArtist());
-        tvEnd.setText(PlayMainage.formatTime(PlayMainage.mediaPlayer.getDuration()));
+        tvEnd.setText(PlayManager.formatTime(PlayManager.mediaPlayer.getDuration()));
         RxBus.getDefault().post(new MusicCodeEvent());
         UpdateButton(true);
         boolean isLike = IsLike(music);

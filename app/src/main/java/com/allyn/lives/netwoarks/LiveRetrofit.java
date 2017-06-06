@@ -1,6 +1,6 @@
 package com.allyn.lives.netwoarks;
 
-import com.allyn.lives.app.MainApp;
+import com.allyn.lives.app.MainApplication;
 import com.allyn.lives.utils.NetworkUtils;
 import com.facebook.stetho.okhttp3.StethoInterceptor;
 
@@ -25,19 +25,19 @@ public class LiveRetrofit {
     LiveApi liveApi;
 
     public LiveRetrofit(String Ip) {
-        File cacheFile = new File(MainApp.getContexts().getExternalCacheDir(), "UMarketCache");
+        File cacheFile = new File(MainApplication.getContexts().getExternalCacheDir(), "UMarketCache");
         Cache cache = new Cache(cacheFile, 1024 * 1024 * 50);
         Interceptor interceptor = new Interceptor() {
             @Override
             public Response intercept(Chain chain) throws IOException {
                 Request request = chain.request();
-                if (NetworkUtils.isNetworkAvailable(MainApp.getContexts().getApplicationContext())) {
+                if (NetworkUtils.isNetworkAvailable(MainApplication.getContexts().getApplicationContext())) {
                     request = request.newBuilder()
                             .cacheControl(CacheControl.FORCE_CACHE)
                             .build();
                 }
                 Response response = chain.proceed(request);
-                if (NetworkUtils.isNetworkAvailable(MainApp.getContexts().getApplicationContext())) {
+                if (NetworkUtils.isNetworkAvailable(MainApplication.getContexts().getApplicationContext())) {
                     int maxAge = 0 * 60;
                     // 有网络时 设置缓存超时时间0个小时
                     response.newBuilder()

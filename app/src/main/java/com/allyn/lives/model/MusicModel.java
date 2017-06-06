@@ -4,7 +4,7 @@ package com.allyn.lives.model;
 import android.database.Cursor;
 import android.net.Uri;
 
-import com.allyn.lives.app.MainApp;
+import com.allyn.lives.app.MainApplication;
 import com.allyn.lives.bean.MusicBean;
 
 import java.util.ArrayList;
@@ -24,7 +24,7 @@ public class MusicModel {
     public static List<MusicBean> getLocaleMusic() {
 
         List<MusicBean> musicList = new ArrayList<>();
-        Cursor cursor = MainApp.getContexts().getContentResolver().query(contentUri, null, null, null, sortOrder);
+        Cursor cursor = MainApplication.getContexts().getContentResolver().query(contentUri, null, null, null, sortOrder);
 
         while (cursor.moveToNext()) {
             int idCol = cursor.getColumnIndex(Media._ID);

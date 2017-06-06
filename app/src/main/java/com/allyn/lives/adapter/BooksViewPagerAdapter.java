@@ -5,7 +5,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 import com.allyn.lives.R;
-import com.allyn.lives.app.MainApp;
+import com.allyn.lives.app.MainApplication;
 import com.allyn.lives.fragment.books.BooksClassifyFragment;
 import com.allyn.lives.fragment.books.BooksListFragment;
 
@@ -18,7 +18,7 @@ public class BooksViewPagerAdapter extends FragmentPagerAdapter {
 
     public BooksViewPagerAdapter(FragmentManager manager) {
         super(manager);
-        tab_title = MainApp.getContexts().getResources().getStringArray(R.array.books_classify_tab);
+        tab_title = MainApplication.getContexts().getResources().getStringArray(R.array.books_classify_tab);
     }
 
     @Override

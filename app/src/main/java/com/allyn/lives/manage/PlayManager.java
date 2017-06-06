@@ -8,7 +8,7 @@ import android.provider.BaseColumns;
 import android.provider.MediaStore;
 import android.util.Log;
 
-import com.allyn.lives.app.MainApp;
+import com.allyn.lives.app.MainApplication;
 import com.allyn.lives.bean.MusicBean;
 import com.allyn.lives.fragment.music.MusicLocalListFragment;
 
@@ -18,8 +18,9 @@ import java.util.List;
 
 /**
  * Created by Administrator on 2016/7/6.
+ * 音乐播放控制器
  */
-public class PlayMainage {
+public class PlayManager {
 
     /***
      * 顺序播放
@@ -55,7 +56,7 @@ public class PlayMainage {
     public static MediaPlayer play(int musicPostion, boolean isliteorm) {
         MusicBean musicBean;
         if (isliteorm) {
-            musicBeen = MainApp.getLiteOrm().query(MusicBean.class);
+            musicBeen = MainApplication.getLiteOrm().query(MusicBean.class); // 查询数据库
             musicBean = musicBeen.get(musicPostion);
             Log.i("", "isliteorm=================true");
 
@@ -137,10 +138,6 @@ public class PlayMainage {
     public static boolean delete(Context context, MusicBean musicBean) {
         ContentResolver cr = context.getContentResolver();
         Uri uri = MediaStore.Audio.Media.getContentUriForPath(musicBean.getFileData());
-//        boolean isok=deleteMusic(musicBean.getFileData());
-//        if (isok){
-//            return true;
-//        }
         long s = cr.delete(uri, BaseColumns._ID + "=" + musicBean.getId(), null);
         if (s != -1) {
             return true;

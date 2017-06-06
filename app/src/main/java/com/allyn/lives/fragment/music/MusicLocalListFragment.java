@@ -4,8 +4,6 @@ import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.SearchView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +11,6 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.allyn.lives.R;
 import com.allyn.lives.activity.music.MusicPlayActivivy;
@@ -22,7 +19,7 @@ import com.allyn.lives.bean.MusicBean;
 import com.allyn.lives.events.MusicBeamEvent;
 import com.allyn.lives.events.MusicCodeEvent;
 import com.allyn.lives.fragment.base.BaseFragment;
-import com.allyn.lives.manage.PlayMainage;
+import com.allyn.lives.manage.PlayManager;
 import com.allyn.lives.model.MusicModel;
 import com.allyn.lives.service.MusicService;
 import com.allyn.lives.utils.Config;
@@ -122,8 +119,8 @@ public class MusicLocalListFragment extends BaseFragment {
             relativeLayout.setVisibility(View.VISIBLE);
         }
         sidrbar.setTextDialog(dialog);
-        tvAuthorName.setText(PlayMainage.getList().get(position).getName());
-        MediaPlayer mediaPlayer = PlayMainage.mediaPlayer;
+        tvAuthorName.setText(PlayManager.getList().get(position).getName());
+        MediaPlayer mediaPlayer = PlayManager.mediaPlayer;
         if (mediaPlayer != null) {
             if (mediaPlayer.isPlaying()) {
                 tvCode.setText("播放中...");

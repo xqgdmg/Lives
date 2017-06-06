@@ -9,14 +9,14 @@ import com.litesuits.orm.LiteOrm;
 /**
  * Created by Administrator on 2016/3/25.
  */
-public class MainApp extends Application {
+public class MainApplication extends Application {
 
-    static MainApp mainApp;
+    static MainApplication mainApplication;
     static LiteOrm liteOrm;
 
     @Override
     public void onCreate() {
-        mainApp = this;
+        mainApplication = this;
         super.onCreate();
         JUtils.initialize(this);
         Beam.init(this);
@@ -30,13 +30,16 @@ public class MainApp extends Application {
         }
     }
 
-    public static MainApp getContexts() {
-        return mainApp;
+    public static MainApplication getContexts() {
+        return mainApplication;
     }
 
+    /*
+     * LiteOrm 是数据库的 orm 框架
+     */
     public static LiteOrm getLiteOrm() {
         if (liteOrm == null) {
-            liteOrm = LiteOrm.newCascadeInstance(mainApp.getApplicationContext(), "musiclike.db");
+            liteOrm = LiteOrm.newCascadeInstance(mainApplication.getApplicationContext(), "musiclike.db");
         }
         return liteOrm;
     }

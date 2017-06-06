@@ -6,10 +6,9 @@ import android.media.MediaPlayer;
 import android.os.Binder;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.util.Log;
 
 import com.allyn.lives.events.MusicBeamEvent;
-import com.allyn.lives.manage.PlayMainage;
+import com.allyn.lives.manage.PlayManager;
 import com.allyn.lives.utils.Config;
 import com.allyn.lives.utils.RxBus;
 
@@ -19,7 +18,7 @@ public class MusicService extends Service {
 
     private final IBinder mBinder = new MyBinder();
 
-    public static int servicePosition = -1;
+    public static int servicePosition = -1;//当前播放音乐下标，
 
     @Override
     public int onStartCommand(Intent intent, final int flags, int startId) {
@@ -30,67 +29,67 @@ public class MusicService extends Service {
             int post = bundle.getInt(Config.position_liteorm, -1);
             //更新当前播放音乐下标，
             servicePosition = post;
-            PlayMainage.stop();
+            PlayManager.stop();
 
-            PlayMainage.play(servicePosition,true).setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            PlayManager.play(servicePosition,true).setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                 @Override
                 public void onCompletion(MediaPlayer mediaPlayer) {
                     //这是当前音乐播放结束之后的监听，先判断播放类型，在播放音乐，
-                    switch (PlayMainage.getCode()) {
-                        case PlayMainage.ORDER:
+                    switch (PlayManager.getCode()) {
+                        case PlayManager.ORDER:
                             //判断是不是最后一首歌曲
-                            if (servicePosition == PlayMainage.getMusicSize() - 1) {
+                            if (servicePosition == PlayManager.getMusicSize() - 1) {
                                 servicePosition = 0;
                             }
                             servicePosition++;
                             break;
-                        case PlayMainage.RANDOM:
-                            servicePosition = new Random().nextInt(PlayMainage.getMusicSize() - 1);
+                        case PlayManager.RANDOM:
+                            servicePosition = new Random().nextInt(PlayManager.getMusicSize() - 1);
                             break;
-                        case PlayMainage.REPOT:
+                        case PlayManager.REPOT:
                             break;
                     }
-                    PlayMainage.stop();
-                    PlayMainage.play(servicePosition, true);
+                    PlayManager.stop();
+                    PlayManager.play(servicePosition, true);
                     RxBus.getDefault().post(new MusicBeamEvent(servicePosition));
                 }
             });
             //发送当前播放音乐下标，
             RxBus.getDefault().post(new MusicBeamEvent(servicePosition));
         } else {
-            if (servicePosition == position) {
-                if (PlayMainage.mediaPlayer.isPlaying()) {
-                    PlayMainage.pause();
+            if (servicePosition == position) {  // 当前播放的下标 == 传过来的坐标
+                if (PlayManager.mediaPlayer.isPlaying()) { // 正在播放，停止播放
+                    PlayManager.pause();
                     RxBus.getDefault().post(new MusicBeamEvent(servicePosition));
-                } else {
-                    PlayMainage.play(position, false);
+                } else { // 停止播放，开始播放
+                    PlayManager.play(position, false);
                     RxBus.getDefault().post(new MusicBeamEvent(servicePosition));
                 }
             } else {
                 //更新当前播放音乐下标，
                 servicePosition = position;
-                PlayMainage.stop();
+                PlayManager.stop();
 
-                PlayMainage.play(position, false).setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                PlayManager.play(position, false).setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                     @Override
                     public void onCompletion(MediaPlayer mediaPlayer) {
                         //这是当前音乐播放结束之后的监听，先判断播放类型，在播放音乐，
-                        switch (PlayMainage.getCode()) {
-                            case PlayMainage.ORDER:
+                        switch (PlayManager.getCode()) {
+                            case PlayManager.ORDER:
                                 //判断是不是最后一首歌曲
-                                if (servicePosition == PlayMainage.getMusicSize() - 1) {
+                                if (servicePosition == PlayManager.getMusicSize() - 1) {
                                     servicePosition = 0;
                                 }
                                 servicePosition++;
                                 break;
-                            case PlayMainage.RANDOM:
-                                servicePosition = new Random().nextInt(PlayMainage.getMusicSize() - 1);
+                            case PlayManager.RANDOM:
+                                servicePosition = new Random().nextInt(PlayManager.getMusicSize() - 1);
                                 break;
-                            case PlayMainage.REPOT:
+                            case PlayManager.REPOT:
                                 break;
                         }
-                        PlayMainage.stop();
-                        PlayMainage.play(servicePosition,false);
+                        PlayManager.stop();
+                        PlayManager.play(servicePosition,false);
                         RxBus.getDefault().post(new MusicBeamEvent(servicePosition));
                     }
                 });

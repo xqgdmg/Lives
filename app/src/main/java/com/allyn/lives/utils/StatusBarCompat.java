@@ -11,7 +11,7 @@ import android.view.Window;
 import android.view.WindowManager;
 
 import com.allyn.lives.R;
-import com.allyn.lives.app.MainApp;
+import com.allyn.lives.app.MainApplication;
 
 /**
  * Utils for status bar
@@ -21,7 +21,7 @@ public class StatusBarCompat {
 
     public static final String TAG = StatusBarCompat.class.getName();
 
-    public static final int COLOR_DEFAULT_PINK = MainApp.getContexts().getResources().getColor(R.color.colorPrimary);
+    public static final int COLOR_DEFAULT_PINK = MainApplication.getContexts().getResources().getColor(R.color.colorPrimary);
     public static final int COLOR_DEFAULT_WHITE2 = Color.parseColor("#FFBDBDBD");
     public static final int COLOR_DEFAULT_WHITE = Color.parseColor("#ffffff");
 

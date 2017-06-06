@@ -4,16 +4,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.util.Log;
-import android.widget.Toast;
 
 import com.allyn.lives.activity.music.MusicPlayActivivy;
-import com.allyn.lives.app.MainApp;
+import com.allyn.lives.app.MainApplication;
 import com.allyn.lives.bean.MusicBean;
 import com.allyn.lives.fragment.music.MusicLocalLikeFragment;
 import com.allyn.lives.service.MusicService;
 import com.allyn.lives.utils.Config;
-import com.jude.beam.expansion.list.BeamListFragment;
 import com.jude.beam.expansion.list.BeamListFragmentPresenter;
 import com.jude.easyrecyclerview.adapter.RecyclerArrayAdapter;
 
@@ -47,7 +44,7 @@ public class MusicLikePresenter extends BeamListFragmentPresenter<MusicLocalLike
     public void onRefresh() {
         super.onRefresh();
         getAdapter().clear();
-        musicBean = MainApp.getLiteOrm().query(MusicBean.class);
+        musicBean = MainApplication.getLiteOrm().query(MusicBean.class);
         Collections.reverse(musicBean);
         getAdapter().addAll(musicBean);
         getAdapter().setOnItemClickListener(this);

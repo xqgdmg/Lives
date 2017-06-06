@@ -2,6 +2,7 @@ package com.allyn.lives.utils;
 
 /**
  * Created by Administrator on 2016/6/24.
+ * 配置信息
  */
 public class Config {
 

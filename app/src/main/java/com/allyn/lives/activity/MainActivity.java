@@ -18,13 +18,12 @@ import android.view.View;
 
 import com.allyn.lives.R;
 import com.allyn.lives.activity.base.BaseActivity;
-import com.allyn.lives.app.MainApp;
+import com.allyn.lives.app.MainApplication;
 import com.allyn.lives.fragment.SettingsFragment;
 import com.allyn.lives.fragment.TranslationFragment;
 import com.allyn.lives.fragment.books.BooksMainFragment;
 import com.allyn.lives.fragment.books.RecommendBooksFragment;
 import com.allyn.lives.fragment.music.MusicLocalFragment;
-import com.allyn.lives.fragment.video.TVFragment;
 import com.allyn.lives.service.MusicService;
 import com.allyn.lives.view.bottontab.BottomBarTab;
 import com.allyn.lives.view.bottontab.BottomNavigationBar;
@@ -46,7 +45,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     BottomNavigationBar bottomLayout;
 
     MusicService mService;
-    boolean mBound = false;
+    boolean mIsBind = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,18 +53,14 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         Intent intent = new Intent(this, MusicService.class);
-        bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
+        bindService(intent, mServiceConnection, Context.BIND_AUTO_CREATE);
         setThere();
         initView();
     }
 
     private void setThere() {
         isok = getSharedPreferences("config", MODE_PRIVATE).getBoolean("isUserDarkMode", false);
-//        if (isok) {
         setTheme(R.style.AppTheme);
-//        } else {
-//            setTheme(R.style.Mytheme);
-//        }
     }
 
     private void initView() {
@@ -88,8 +83,8 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (mConnection != null)
-            unbindService(mConnection);
+        if (mServiceConnection != null)
+            unbindService(mServiceConnection);
     }
 
     @Override
@@ -121,10 +116,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
             bottomLayout.setVisibility(View.GONE);
         }
-//        else if (id == R.id.nav_slideshow) {
-//            fragment = TVFragment.newInstance();
-//            bottomLayout.setVisibility(View.GONE);
-//        }
         else if (id == R.id.nav_share) {
             setDarkTheme(isok);
             this.recreate();
@@ -153,8 +144,8 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     }
 
     public void setUpBottomNavigationBar() {
-        bottomLayout.addTab(R.drawable.ic_classfiy, getResources().getString(R.string.classify), MainApp.getContexts().getResources().getColor(R.color.colorPrimary));
-        bottomLayout.addTab(R.drawable.ic_book_remove, getResources().getString(R.string.recommend), MainApp.getContexts().getResources().getColor(R.color.colorAccent));
+        bottomLayout.addTab(R.drawable.ic_classfiy, getResources().getString(R.string.classify), MainApplication.getContexts().getResources().getColor(R.color.colorPrimary));
+        bottomLayout.addTab(R.drawable.ic_book_remove, getResources().getString(R.string.recommend), MainApplication.getContexts().getResources().getColor(R.color.colorAccent));
         bottomLayout.setOnTabListener(new BottomNavigationBar.TabListener() {
             @Override
             public void onSelected(BottomBarTab tab, int position) {
@@ -178,19 +169,18 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         });
     }
 
-    private ServiceConnection mConnection = new ServiceConnection() {
+    private ServiceConnection mServiceConnection = new ServiceConnection() {
 
         @Override
-        public void onServiceConnected(ComponentName className,
-                                       IBinder service) {
+        public void onServiceConnected(ComponentName className,IBinder service) {
             MusicService.MyBinder binder = (MusicService.MyBinder) service;
             mService = binder.getService();
-            mBound = true;
+            mIsBind = true;
         }
 
         @Override
         public void onServiceDisconnected(ComponentName arg0) {
-            mBound = false;
+            mIsBind = false;
         }
     };
 }

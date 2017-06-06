@@ -14,6 +14,7 @@
         android:layout_marginBottom="20dp"
         android:src="@mipmap/phone" />
 
+    <!-- textAppearance 位文字的外观，不止是大小,白底黑字，黑底白字-->
     <TextView
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
