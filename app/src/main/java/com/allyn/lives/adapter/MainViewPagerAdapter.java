@@ -10,13 +10,13 @@ import com.allyn.lives.fragment.books.BooksClassifyFragment;
 import com.allyn.lives.fragment.books.BooksListFragment;
 
 /**
- * Created by apple on 16/6/11.
+ * 主页面 FragmentPagerAdapter
  */
-public class BooksViewPagerAdapter extends FragmentPagerAdapter {
+public class MainViewPagerAdapter extends FragmentPagerAdapter {
 
     String[] tab_title;
 
-    public BooksViewPagerAdapter(FragmentManager manager) {
+    public MainViewPagerAdapter(FragmentManager manager) {
         super(manager);
         tab_title = MainApplication.getContexts().getResources().getStringArray(R.array.books_classify_tab);
     }
@@ -29,7 +29,7 @@ public class BooksViewPagerAdapter extends FragmentPagerAdapter {
                 fragment = BooksClassifyFragment.newInstance();
                 break;
             case 1:
-                fragment = BooksListFragment.newInstance(9);
+                fragment = BooksListFragment.newInstance(9); // setArguments 传值 , getArguments() 在 presenter
                 break;
             case 2:
                 fragment = BooksListFragment.newInstance(7);

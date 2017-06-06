@@ -21,7 +21,7 @@ import com.allyn.lives.activity.base.BaseActivity;
 import com.allyn.lives.app.MainApplication;
 import com.allyn.lives.fragment.SettingsFragment;
 import com.allyn.lives.fragment.TranslationFragment;
-import com.allyn.lives.fragment.books.BooksMainFragment;
+import com.allyn.lives.fragment.books.MainFragment;
 import com.allyn.lives.fragment.books.RecommendBooksFragment;
 import com.allyn.lives.fragment.music.MusicLocalFragment;
 import com.allyn.lives.service.MusicService;
@@ -31,7 +31,9 @@ import com.allyn.lives.view.bottontab.BottomNavigationBar;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-
+/*
+ * 主页面
+ */
 public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private boolean isok = true;
@@ -54,32 +56,39 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         ButterKnife.bind(this);
         Intent intent = new Intent(this, MusicService.class);
         bindService(intent, mServiceConnection, Context.BIND_AUTO_CREATE);
-        setThere();
+        setTheme();
         initView();
     }
 
-    private void setThere() {
+    /*
+     * 设置主题
+     */
+    private void setTheme() {
         isok = getSharedPreferences("config", MODE_PRIVATE).getBoolean("isUserDarkMode", false);
         setTheme(R.style.AppTheme);
     }
 
     private void initView() {
 
+         // 配置 DrawerLayout 和 toolbar
         setSupportActionBar(toolbar);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
+         // 设置 NavigationView
         navigationView.setNavigationItemSelectedListener(this);
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.container, BooksMainFragment.newInstance()).commitAllowingStateLoss();
+        getSupportFragmentManager().beginTransaction().replace(R.id.container, MainFragment.newInstance()).commitAllowingStateLoss(); // commitAllowingStateLoss
 
         setUpBottomNavigationBar();
 
         toolbar.setTitle("图书");
     }
 
+    /*
+     * 解绑服务
+     */
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -87,6 +96,9 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             unbindService(mServiceConnection);
     }
 
+    /*
+     * 打开 DrawerLayout 的时候，点击返回键，关闭 DrawerLayout
+     */
     @Override
     public void onBackPressed() {
         if (drawer.isDrawerOpen(GravityCompat.START)) {
@@ -102,7 +114,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         Fragment fragment = null;
         int id = item.getItemId();
         if (id == R.id.nav_gallery) {
-            fragment = BooksMainFragment.newInstance();
+            fragment = MainFragment.newInstance();
             toolbar.setTitle("图书");
 
         } else if (id == R.id.nav_camera) {
@@ -126,16 +138,22 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
             bottomLayout.setVisibility(View.GONE);
         }
+
+         // 替换中间的 container
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.container, fragment)
                 .setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
                 .commitAllowingStateLoss();
 
+         // 还要自己关，drawerLayout
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 
+    /*
+     * 配置夜间主题
+     */
     private void setDarkTheme(boolean is) {
         SharedPreferences sp = getSharedPreferences("config", MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
@@ -143,6 +161,9 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         editor.commit();
     }
 
+    /*
+     * 设置底部导航栏，不可见
+     */
     public void setUpBottomNavigationBar() {
         bottomLayout.addTab(R.drawable.ic_classfiy, getResources().getString(R.string.classify), MainApplication.getContexts().getResources().getColor(R.color.colorPrimary));
         bottomLayout.addTab(R.drawable.ic_book_remove, getResources().getString(R.string.recommend), MainApplication.getContexts().getResources().getColor(R.color.colorAccent));
@@ -152,7 +173,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 Fragment fragment = null;
                 switch (position) {
                     case 0:
-                        fragment = BooksMainFragment.newInstance();
+                        fragment = MainFragment.newInstance();
                         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
                         drawer.closeDrawer(GravityCompat.START);
                         break;
@@ -163,19 +184,22 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 getSupportFragmentManager()
                         .beginTransaction()
                         .replace(R.id.container, fragment)
-                        .setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
+                        .setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out) // fragment 切换动画，使用系统的动画
                         .commitAllowingStateLoss();
             }
         });
     }
 
+    /*
+     * ServiceConnection
+     */
     private ServiceConnection mServiceConnection = new ServiceConnection() {
 
         @Override
         public void onServiceConnected(ComponentName className,IBinder service) {
             MusicService.MyBinder binder = (MusicService.MyBinder) service;
-            mService = binder.getService();
-            mIsBind = true;
+            mService = binder.getService(); // 返回 service
+            mIsBind = true; // 返回是否在连接状态
         }
 
         @Override

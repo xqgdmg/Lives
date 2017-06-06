@@ -1,18 +1,12 @@
 package com.allyn.lives.holder;
 
-import android.support.design.widget.BottomSheetDialog;
 import android.support.v7.widget.CardView;
-import android.text.Html;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.allyn.lives.R;
 import com.allyn.lives.bean.BooksDetailBean;
-import com.allyn.lives.netwoarks.IPConfig;
 import com.allyn.lives.utils.Dialog;
 import com.jude.easyrecyclerview.adapter.BaseViewHolder;
 

@@ -1,4 +1,4 @@
-package com.allyn.lives.netwoarks;
+package com.allyn.lives.retrofit;
 
 import com.allyn.lives.app.MainApplication;
 import com.allyn.lives.utils.NetworkUtils;

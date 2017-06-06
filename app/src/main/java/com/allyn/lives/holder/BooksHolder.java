@@ -10,7 +10,7 @@ import android.widget.TextView;
 import com.allyn.lives.R;
 import com.allyn.lives.activity.books.BooksDetailsActivity;
 import com.allyn.lives.bean.BooksBean;
-import com.allyn.lives.netwoarks.IPConfig;
+import com.allyn.lives.retrofit.IPConfig;
 import com.allyn.lives.utils.Config;
 import com.jude.easyrecyclerview.adapter.BaseViewHolder;
 

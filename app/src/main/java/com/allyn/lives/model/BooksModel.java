@@ -3,7 +3,7 @@ package com.allyn.lives.model;
 import com.allyn.lives.bean.BooksBean;
 import com.allyn.lives.bean.BooksClassifyBean;
 import com.allyn.lives.bean.BooksDetailBean;
-import com.allyn.lives.netwoarks.Invoking;
+import com.allyn.lives.retrofit.Invoking;
 
 import rx.Observable;
 import rx.Subscriber;

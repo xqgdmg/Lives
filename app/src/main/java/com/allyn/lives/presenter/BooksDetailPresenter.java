@@ -12,7 +12,7 @@ import com.allyn.lives.activity.books.BooksDetailsActivity;
 import com.allyn.lives.adapter.BookTitleAdapter;
 import com.allyn.lives.bean.BooksDetailBean;
 import com.allyn.lives.model.BooksModel;
-import com.allyn.lives.netwoarks.IPConfig;
+import com.allyn.lives.retrofit.IPConfig;
 import com.allyn.lives.utils.Config;
 import com.allyn.lives.utils.Dialog;
 import com.allyn.lives.utils.Transition;

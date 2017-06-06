@@ -4,36 +4,32 @@ package com.allyn.lives.fragment.books;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.allyn.lives.R;
-import com.allyn.lives.adapter.BooksViewPagerAdapter;
+import com.allyn.lives.adapter.MainViewPagerAdapter;
 import com.allyn.lives.fragment.base.BaseFragment;
-import com.allyn.lives.utils.Config;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
 
 /**
- * A simple {@link Fragment} subclass.
+ * 主 fragment
+ * tabLayout + ViewPager
  */
-public class BooksMainFragment extends BaseFragment {
-
+public class MainFragment extends BaseFragment {
 
     @Bind(R.id.tablayout)
     TabLayout mTabLayout;
     @Bind(R.id.viewpager)
     ViewPager mViewpager;
 
-
-    public static BooksMainFragment newInstance() {
-        BooksMainFragment imageMainFragment = new BooksMainFragment();
+    public static MainFragment newInstance() {
+        MainFragment imageMainFragment = new MainFragment();
         return imageMainFragment;
     }
 
@@ -47,9 +43,8 @@ public class BooksMainFragment extends BaseFragment {
     }
 
     private void initView() {
-        BooksViewPagerAdapter viewpageradapter = new BooksViewPagerAdapter(getChildFragmentManager());
+        MainViewPagerAdapter viewpageradapter = new MainViewPagerAdapter(getChildFragmentManager());
         mViewpager.setAdapter(viewpageradapter);
-//        mViewpager.setOffscreenPageLimit(6);
-        mTabLayout.setupWithViewPager(mViewpager);
+        mTabLayout.setupWithViewPager(mViewpager); // TabLayout 绑定 ViewPager
     }
 }

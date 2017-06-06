@@ -24,7 +24,9 @@ import com.jude.easyrecyclerview.adapter.BaseViewHolder;
 @RequiresPresenter(BooksListFragmentPresenter.class)
 public class BooksListFragment extends BeamListFragment<BooksListFragmentPresenter, BooksBean.ListEntity> {
 
-
+    /*
+     * setArguments 传值
+     */
     public static BooksListFragment newInstance(int typeId) {
         Bundle bundle = new Bundle();
         bundle.putInt(Config.Type, typeId);

@@ -1,4 +1,4 @@
-package com.allyn.lives.netwoarks;
+package com.allyn.lives.retrofit;
 
 /**
  * Created by Administrator on 2016/6/17.

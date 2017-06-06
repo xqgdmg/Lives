@@ -1,7 +1,7 @@
 package com.allyn.lives.model;
 
 import com.allyn.lives.bean.TranslationBean;
-import com.allyn.lives.netwoarks.Invoking;
+import com.allyn.lives.retrofit.Invoking;
 
 import rx.Observable;
 import rx.Subscriber;
