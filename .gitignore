@@ -27,6 +27,7 @@ proguard/
 *.ipr
 *.iws
 *.idea/
+*.idea/libraries
 .idea/
 
 **/build/
