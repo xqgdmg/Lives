@@ -36,7 +36,6 @@ public class SettingsFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 getActivity().startActivity(new Intent(getActivity(), ConstMainActivity.class));
-
             }
         });
         return v;
