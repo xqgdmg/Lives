@@ -28,7 +28,10 @@ proguard/
 *.iws
 *.idea/
 *.idea/libraries
+.idea/libraries
 .idea/
+/.idea/workspace.xml
+/.idea/libraries
 
 **/build/
 .gradle
